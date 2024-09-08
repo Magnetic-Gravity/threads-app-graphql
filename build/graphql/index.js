@@ -16,15 +16,20 @@ function createApolloGraphqlServer() {
         //Create Graphql Server
         const gqlServer = new server_1.ApolloServer({
             typeDefs: `
+            ${user_1.User.typeDefs}
             type Query {
                ${user_1.User.queries}
+               getContext: String
             }
             type Mutation {
                 ${user_1.User.mutations}
             }    
         `, //Schema
             resolvers: {
-                Query: Object.assign({}, user_1.User.resolvers.queries),
+                Query: Object.assign(Object.assign({}, user_1.User.resolvers.queries), { getContext: (_, parametrs, context) => {
+                        console.log('context', context);
+                        return "Okay";
+                    } }),
                 Mutation: Object.assign({}, user_1.User.resolvers.mutations),
             } //resolvers
         });
